@@ -1,32 +1,57 @@
-//import React from 'react';
+import React from 'react';
 import {BrowserRouter, Switch, Route, Link} from 'react-router-dom';
+import {connect} from 'react-redux';
+import * as ChatActions from './store/actions/chatActions';
 
-function App() {
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <Switch>
-          <Route 
-            path="/login"
-            render= {props=>{
-              return(
-                <h1>login</h1>
-              )
-            }}
-          />
 
-          <Route 
-            path="/"
-            render= {props=>{
-              return(
-                <h1>root</h1>
-              )
-            }}
-          />    
-        </Switch>
-      </BrowserRouter>
-    </div>
-  );
+class App extends React.Component{
+  componentDidMount(){
+    this.props.setupSocket();
+  }
+  render(){
+    return (
+      <div className="App">
+        <BrowserRouter>
+          <Switch>
+            <Route 
+              path="/login"
+              render= {props=>{
+                return(
+                  <h1>login</h1>
+                )
+              }}
+            />
+
+            <Route 
+              path="/"
+              render= {props=>{
+                return(
+                  <h1>root</h1>
+                )
+              }}
+            />    
+          </Switch>
+        </BrowserRouter>
+      </div>  
+    );
+  }
 }
 
-export default App;
+const mapStateToProps = state=>({
+      ...state.auth,
+      ...state.chat
+  
+});
+
+const mapDispatchToProps = dispatch =>({
+  setupSocket:()=>{
+    dispatch(ChatActions.setupSocket());
+  }
+
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
+
