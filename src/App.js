@@ -1,7 +1,10 @@
 import React from 'react';
-import {BrowserRouter, Switch, Route, Link} from 'react-router-dom';
+import {BrowserRouter, Switch, Route, Link, Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 import * as ChatActions from './store/actions/chatActions';
+import Auth from './components/pages/Auth';
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./assets/css/swag.css";
 
 
 class App extends React.Component{
@@ -13,22 +16,27 @@ class App extends React.Component{
       <div className="App">
         <BrowserRouter>
           <Switch>
-            <Route 
+            <Route  
               path="/login"
-              render= {props=>{
-                return(
-                  <h1>login</h1>
-                )
-              }}
+              component={Auth}
             />
-
+            <Route  
+              path="/signup"
+              component={Auth}
+            />
             <Route 
               path="/"
               render= {props=>{
-                return(
-                  <h1>root</h1>
-                )
-              }}
+                if(!this.props.token){
+                  return(
+                    <Redirect to='/login' />
+                  )} else {
+                      return(
+                        <h1>root</h1>
+                      )
+                  }
+                } 
+              }
             />    
           </Switch>
         </BrowserRouter>
